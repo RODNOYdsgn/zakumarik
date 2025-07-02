@@ -3,51 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Каталог товаров</title>
+    <title>ZAKUMARIK | Balaya Kalitva</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --main-bg: #0a0a0a;
+            --card-bg: #181818;
+            --accent: #00ff88;
+            --text-main: #fff;
+            --text-secondary: #bdbdbd;
+            --border-glow: 0 0 16px #00ff88, 0 0 32px #00ff88;
+        }
+        body {
+            background: var(--main-bg);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .logo-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 32px;
+            margin-bottom: 24px;
+        }
+        .logo-circle {
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+            width: 220px;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--border-glow);
+            margin-bottom: 20px;
+            background: radial-gradient(circle at 60% 40%, #222 60%, #0a0a0a 100%);
+        }
+        .logo-content {
+            text-align: center;
+        }
+        .logo-content .age {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .logo-content .icon {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .logo-content .brand {
+            font-size: 2.1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .logo-content .city {
+            font-family: 'Pacifico', cursive, sans-serif;
+            font-size: 1.4rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .logo-content .desc {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+        .loyalty-banner {
+            background: linear-gradient(90deg, #00ff88 0%, #0a0a0a 100%);
+            color: #111;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 0 auto 24px auto;
+            max-width: 420px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1.12rem;
+            box-shadow: 0 0 24px #00ff8866;
+            animation: pulse 2.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 24px #00ff8866; }
+            50% { box-shadow: 0 0 36px #00ff88cc; }
+        }
+        .container {
+            max-width: 540px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 18px;
+            box-shadow: 0 0 24px #00ff8822;
+            padding: 24px 16px 32px 16px;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--accent);
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+        }
+        .cart {
+            margin-bottom: 24px;
+        }
+        .cart-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 16px 0;
+        }
+        .cart-list li {
+            background: #101010;
+            border-left: 4px solid var(--accent);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-list .item-name {
+            font-weight: 500;
+        }
+        .cart-list .item-qty {
+            color: var(--accent);
+            margin-left: 8px;
+        }
+        .cart-list .item-price {
+            font-weight: 500;
+        }
+        .cart-summary {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.12rem;
+            margin-bottom: 8px;
+        }
+        .cart-summary .label {
+            color: var(--text-secondary);
+        }
+        .cart-summary .value {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .order-btn {
+            width: 100%;
+            background: var(--accent);
+            color: #111;
+            border: none;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            box-shadow: 0 0 12px #00ff8844;
+            cursor: pointer;
+            transition: background 0.15s;
+            margin-top: 10px;
+        }
+        .order-btn:hover {
+            background: #00e676;
+        }
+        .order-form {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .order-form input {
+            background: #222;
+            color: #fff;
+            border: 1.5px solid var(--accent);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 1rem;
+        }
+        @media (max-width: 600px) {
+            .logo-circle { width: 150px; height: 150px; }
+            .container { padding: 12px 4px 24px 4px; }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>🛍️ Каталог товаров</h1>
-            <div class="cart-info">
-                <span id="cart-count">0</span>
-                <button id="cart-btn" onclick="toggleCart()">🛒 Корзина</button>
-            </div>
-        </header>
-
-        <div class="loyalty-banner" id="loyalty-banner" style="display: none;">
-            <p>🎉 Следующая покупка со скидкой 35%!</p>
-        </div>
-
-        <div class="categories" id="categories"></div>
-        <div class="products" id="products"></div>
-
-        <div class="cart-modal" id="cart-modal">
-            <div class="cart-content">
-                <div class="cart-header">
-                    <h2>🛒 Ваша корзина</h2>
-                    <button onclick="toggleCart()">✕</button>
+    <div class="logo-block">
+        <div class="logo-circle">
+            <div class="logo-content">
+                <div class="age">18+</div>
+                <div class="icon">
+                    <!-- SVG иконка вейпа -->
+                    <svg width="38" height="48" viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="10" y="14" width="18" height="30" rx="5" stroke="#fff" stroke-width="3"/>
+                        <circle cx="19" cy="29" r="4" stroke="#00ff88" stroke-width="2" fill="none"/>
+                        <rect x="16" y="6" width="6" height="8" rx="2" fill="#fff"/>
+                    </svg>
                 </div>
-                <div class="cart-items" id="cart-items"></div>
-                <div class="cart-total">
-                    <div class="total-amount">
-                        <strong>Итого: <span id="total-amount">0</span> ₽</strong>
-                    </div>
-                    <div class="discount-info" id="discount-info" style="display: none;">
-                        <span class="discount">Скидка: -<span id="discount-amount">0</span> ₽</span>
-                    </div>
-                </div>
-                <div class="order-form" id="order-form">
-                    <input type="text" id="full-name" placeholder="Ваше имя" required>
-                    <input type="tel" id="phone" placeholder="Номер телефона" required>
-                    <button onclick="placeOrder()" class="order-btn">📦 Оформить заказ</button>
-                </div>
+                <div class="brand">ZAKUMARIK</div>
+                <div class="city">balaya kalitva</div>
+                <div class="desc">ПРОДАЖА ВЕЙП ТОВАРОВ</div>
             </div>
         </div>
     </div>
-
+    <div class="loyalty-banner">
+        🎉 Следующая покупка со скидкой <b>35%</b> на самый дешёвый товар!
+    </div>
+    <div class="container">
+        <div class="section-title">🛒 Ваша корзина</div>
+        <ul class="cart-list" id="cart-list">
+            <!-- Товары корзины будут вставлены скриптом -->
+        </ul>
+        <div class="cart-summary">
+            <span class="label">Итого:</span>
+            <span class="value" id="cart-total">0 ₽</span>
+        </div>
+        <div class="cart-summary">
+            <span class="label">Скидка:</span>
+            <span class="value" id="cart-discount">- 0 ₽</span>
+        </div>
+        <form class="order-form" id="order-form">
+            <input type="text" id="full-name" placeholder="Ваше имя" required>
+            <input type="tel" id="phone" placeholder="Телефон" required pattern="^(\+7|8)\d{10}$">
+            <button class="order-btn" type="submit">📦 Оформить заказ</button>
+        </form>
+    </div>
     <script src="script.js"></script>
+    <script>
+        // Быстрая инициализация корзины для примера
+        document.addEventListener('DOMContentLoaded', () => {
+            // Здесь должен быть ваш реальный JS-код для работы с корзиной
+            document.getElementById('cart-list').innerHTML = `
+                <li><span class="item-name">Vape Product</span> <span class="item-qty">x1</span> <span class="item-price">990 ₽</span></li>
+            `;
+            document.getElementById('cart-total').textContent = '990 ₽';
+            document.getElementById('cart-discount').textContent = '- 0 ₽';
+        });
+    </script>
 </body>
 </html>
