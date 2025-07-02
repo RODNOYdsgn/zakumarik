@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог товаров</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🛍️ Каталог товаров</h1>
+            <div class="cart-info">
+                <span id="cart-count">0</span>
+                <button id="cart-btn" onclick="toggleCart()">🛒 Корзина</button>
+            </div>
+        </header>
+
+        <div class="loyalty-banner" id="loyalty-banner" style="display: none;">
+            <p>🎉 Следующая покупка со скидкой 35%!</p>
+        </div>
+
+        <div class="categories" id="categories"></div>
+        <div class="products" id="products"></div>
+
+        <div class="cart-modal" id="cart-modal">
+            <div class="cart-content">
+                <div class="cart-header">
+                    <h2>🛒 Ваша корзина</h2>
+                    <button onclick="toggleCart()">✕</button>
+                </div>
+                <div class="cart-items" id="cart-items"></div>
+                <div class="cart-total">
+                    <div class="total-amount">
+                        <strong>Итого: <span id="total-amount">0</span> ₽</strong>
+                    </div>
+                    <div class="discount-info" id="discount-info" style="display: none;">
+                        <span class="discount">Скидка: -<span id="discount-amount">0</span> ₽</span>
+                    </div>
+                </div>
+                <div class="order-form" id="order-form">
+                    <input type="text" id="full-name" placeholder="Ваше имя" required>
+                    <input type="tel" id="phone" placeholder="Номер телефона" required>
+                    <button onclick="placeOrder()" class="order-btn">📦 Оформить заказ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
