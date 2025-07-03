@@ -1,205 +1,29 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZAKUMAR - Интернет-магазин вейп товаров</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZAKUMAR Vape Shop</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Telegram Web Apps SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header__content">
-                <h1 class="header__logo">ZAKUMAR</h1>
-                <nav class="header__nav">
-                    <button class="btn btn--outline nav-btn" data-category="all">Все товары</button>
-                    <button class="btn btn--outline nav-btn" data-category="Жидкости">Жидкости</button>
-                    <button class="btn btn--outline nav-btn" data-category="Расходники">Расходники</button>
-                    <button class="btn btn--outline nav-btn" data-category="Поды">Поды</button>
-                    <button class="btn btn--outline nav-btn" data-category="Одноразки">Одноразки</button>
-                </nav>
-                <div class="header__actions">
-                    <button class="btn btn--primary" id="cart-btn">
-                        Корзина (<span id="cart-count">0</span>)
-                    </button>
-                    <button class="btn btn--secondary" id="admin-btn">Админ</button>
-                </div>
-            </div>
-        </div>
-    </header>
+  <header class="header container flex items-center justify-between py-16">
+    <h1 class="logo">ZAKUMAR</h1>
+    <button id="cartBtn" class="btn btn--primary">🛒 Корзина <span id="cartCount">(0)</span></button>
+  </header>
 
-    <main class="main">
-        <div class="container">
-            <!-- Welcome Banner -->
-            <section class="welcome-banner">
-                <div class="welcome-banner__content">
-                    <h2>Добро пожаловать в ZAKUMAR</h2>
-                    <p>Широкий выбор качественных вейп товаров</p>
-                    <div class="loyalty-info">
-                        <p>🎉 Система лояльности: скидка 35% на каждую 7-ю покупку!</p>
-                        <p id="loyalty-status">Покупок до скидки: <span id="purchases-left">7</span></p>
-                    </div>
-                </div>
-            </section>
+  <main id="app" class="container"></main>
 
-            <!-- Product Catalog -->
-            <section class="catalog" id="catalog">
-                <h2 class="catalog__title">Каталог товаров</h2>
-                <div class="catalog__grid" id="products-grid">
-                    <!-- Products will be rendered here -->
-                </div>
-            </section>
-        </div>
-    </main>
+  <footer class="container py-16">
+    <a href="#" id="adminLink" class="admin-link">Admin</a>
+  </footer>
 
-    <!-- Cart Modal -->
-    <div class="modal" id="cart-modal">
-        <div class="modal__content">
-            <div class="modal__header">
-                <h3>Корзина</h3>
-                <button class="btn btn--secondary" id="close-cart">✕</button>
-            </div>
-            <div class="modal__body">
-                <div id="cart-items"></div>
-                <div class="cart-summary">
-                    <div class="cart-summary__row">
-                        <span>Подытог:</span>
-                        <span id="cart-subtotal">0 ₽</span>
-                    </div>
-                    <div class="cart-summary__row discount-row" id="discount-row" style="display: none;">
-                        <span>Скидка лояльности (35%):</span>
-                        <span id="discount-amount">0 ₽</span>
-                    </div>
-                    <div class="cart-summary__row total-row">
-                        <span>Итого:</span>
-                        <span id="cart-total">0 ₽</span>
-                    </div>
-                </div>
-            </div>
-            <div class="modal__footer">
-                <button class="btn btn--primary btn--full-width" id="checkout-btn">Оформить заказ</button>
-            </div>
-        </div>
-    </div>
+  <!-- Universal modal shell; its content is injected dynamically -->
+  <div id="modal" class="modal hidden"></div>
 
-    <!-- Order Form Modal -->
-    <div class="modal" id="order-modal">
-        <div class="modal__content">
-            <div class="modal__header">
-                <h3>Оформление заказа</h3>
-                <button class="btn btn--secondary" id="close-order">✕</button>
-            </div>
-            <div class="modal__body">
-                <form id="order-form">
-                    <div class="form-group">
-                        <label class="form-label" for="customer-name">Имя *</label>
-                        <input type="text" class="form-control" id="customer-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="customer-phone">Номер телефона *</label>
-                        <input type="tel" class="form-control" id="customer-phone" required>
-                    </div>
-                    <div class="order-summary">
-                        <h4>Ваш заказ:</h4>
-                        <div id="order-items"></div>
-                        <div class="order-total">
-                            <strong>Итого к оплате: <span id="order-total">0 ₽</span></strong>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal__footer">
-                <button type="submit" form="order-form" class="btn btn--primary btn--full-width">Подтвердить заказ</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Admin Panel -->
-    <div class="modal" id="admin-modal">
-        <div class="modal__content modal__content--large">
-            <div class="modal__header">
-                <h3>Админ-панель</h3>
-                <button class="btn btn--secondary" id="close-admin">✕</button>
-            </div>
-            <div class="modal__body">
-                <div class="admin-tabs">
-                    <button class="btn btn--primary admin-tab-btn active" data-tab="products">Товары</button>
-                    <button class="btn btn--outline admin-tab-btn" data-tab="orders">Заказы</button>
-                    <button class="btn btn--outline admin-tab-btn" data-tab="stats">Статистика</button>
-                </div>
-                
-                <div class="admin-tab-content" id="admin-products">
-                    <div class="admin-actions">
-                        <button class="btn btn--primary" id="add-product-btn">Добавить товар</button>
-                    </div>
-                    <div class="admin-products-grid" id="admin-products-grid">
-                        <!-- Admin products will be rendered here -->
-                    </div>
-                </div>
-                
-                <div class="admin-tab-content" id="admin-orders" style="display: none;">
-                    <div id="admin-orders-list">
-                        <!-- Orders will be rendered here -->
-                    </div>
-                </div>
-                
-                <div class="admin-tab-content" id="admin-stats" style="display: none;">
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <h4>Всего заказов</h4>
-                            <p id="total-orders">0</p>
-                        </div>
-                        <div class="stat-card">
-                            <h4>Общая выручка</h4>
-                            <p id="total-revenue">0 ₽</p>
-                        </div>
-                        <div class="stat-card">
-                            <h4>Товаров на складе</h4>
-                            <p id="total-stock">0</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Admin Login Modal -->
-    <div class="modal" id="admin-login-modal">
-        <div class="modal__content">
-            <div class="modal__header">
-                <h3>Вход в админ-панель</h3>
-                <button class="btn btn--secondary" id="close-admin-login">✕</button>
-            </div>
-            <div class="modal__body">
-                <form id="admin-login-form">
-                    <div class="form-group">
-                        <label class="form-label" for="admin-password">Пароль</label>
-                        <input type="password" class="form-control" id="admin-password" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal__footer">
-                <button type="submit" form="admin-login-form" class="btn btn--primary btn--full-width">Войти</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Success Modal -->
-    <div class="modal" id="success-modal">
-        <div class="modal__content">
-            <div class="modal__header">
-                <h3>Успех!</h3>
-                <button class="btn btn--secondary" id="close-success">✕</button>
-            </div>
-            <div class="modal__body">
-                <p id="success-message">Заказ успешно оформлен!</p>
-            </div>
-            <div class="modal__footer">
-                <button class="btn btn--primary btn--full-width" id="success-ok">OK</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
+  <!-- Main logic -->
+  <script type="module" src="app.js"></script>
 </body>
 </html>
